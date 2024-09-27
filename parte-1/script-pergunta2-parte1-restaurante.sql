@@ -1,11 +1,3 @@
--- Criando o banco de dados ada_food
-
-create database ada_food;
-
--- Conectando ao banco de dados (Só funciona no terminal)
-
-\c ada_food;
-
 -- Criando tabela cliente
 
 create table cliente (
@@ -22,28 +14,28 @@ data_nascimento date not null
 
 create table status_reserva (
 id_status_reserva serial primary key,
-descricao_status_reserva varchar(20) not null unique
+descricao_status_reserva varchar(30) not null
 );
 
 
 -- Criando tabela status_mesa
 create table status_mesa (
 id_status_mesa serial primary key,
-descricao_status_mesa varchar(20) not null unique
+descricao_status_mesa varchar(30) not null
 );
 
 
 -- Criando tabela status_pagamento
 create table status_pagamento (
 id_status_pagamento serial primary key,
-descricao_status_pagamento varchar(20) not null unique
+descricao_status_pagamento varchar(30) not null
 );
 
 
 -- Criando tabela status_pedido
 create table status_pedido (
 id_status_pedido serial primary key, 
-descricao_status_pedido varchar(20) not null unique
+descricao_status_pedido varchar(30) not null
 );
 
 -- Criando tabela prato
@@ -122,7 +114,7 @@ id_pagamento serial primary key,
 id_mesa int not null,
 id_cliente int not null, 
 id_funcionario int not null,
-hora_pagamento default transaction_timestamp(),
+hora_pagamento timestamp default transaction_timestamp(),
 id_status_pagamento int not null,
 
 foreign key (id_mesa)
@@ -142,19 +134,19 @@ foreign key (id_status_pagamento)
 -- Criar tabela reserva
 create table reserva (
 id_reserva serial primary key,
-hora_reserva timestamp not null, 
+hora_reserva timestamp default transaction_timestamp(), 
 quantidade_assentos int not null, 
 id_cliente int not null, 
 id_funcionario int not null,
 id_status_reserva int not null,
 
-foreign key id_cliente
+foreign key (id_cliente)
 	references cliente(id_cliente), 
 	
-foreign key id_funcionario
+foreign key (id_funcionario)
 	references funcionario(id_funcionario), 
 	
-foreign key id_status_reserva
+foreign key (id_status_reserva)
 	references status_reserva(id_status_reserva)
 	
 );
@@ -166,10 +158,10 @@ id_reserva_mesa serial primary key,
 id_mesa int not null,
 id_reserva int not null,
 
-foreign key id_mesa
+foreign key (id_mesa)
 	references mesa(id_mesa),
 	
-foreign key id_reserva
+foreign key (id_reserva)
 	references reserva(id_reserva)
 );
 
